@@ -1,0 +1,5 @@
+.DS_Store
+HW1.aux HW1.log
+*.aux
+*.log
+*.gz
