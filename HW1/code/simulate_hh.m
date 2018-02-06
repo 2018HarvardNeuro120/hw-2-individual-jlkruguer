@@ -6,8 +6,8 @@ clear all
 Iapp = @(t) (t>100)*16;
 
 % Two pulses spaced t_sep ms apart
-%t_sep = 3;
-%Iapp = @(t) (t>10 & t < 12)*10 + (t>12+t_sep & t < 12+t_sep)*10;
+t_sep = 12;
+Iapp = @(t) (t>10 & t < 12)*10 + (t>10+t_sep & t < 12+t_sep)*10;
 
 % Step up from 0 to 6.3 microA at t=100
 %Iapp = @(t) (t>0 & t < 100)*0 + 6.3*(t>100);
@@ -38,11 +38,11 @@ else
 end
 
 %% Plot results
-plot_ax(1) = subplot(211)
+plot_ax(1) = subplot(311)
 plot(t,Iapp(t),'linewidth',2)
 ylabel('Input current (\mu A)')
 
-plot_ax(2) = subplot(212)
+plot_ax(2) = subplot(312)
 plot(t,theta(:,1),'linewidth',2)
 ylabel('Membrane potential (mV)')
 xlabel('Time (ms)')
@@ -64,3 +64,12 @@ end
 
 fr = 1000/median(diff(tspike));
 text(10,[.1 .9]*get(gca,'YLim')',sprintf('Firing rate: %g Hz', fr))
+
+%% Plot gating variables
+plot_ax(3) = subplot(313)
+plot(t,theta(:,2:end))
+ylabel('Gating variable')
+legend('m','n','h')
+xlabel('Time (ms)')
+
+linkaxes(plot_ax,'x')
