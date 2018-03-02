@@ -13,7 +13,7 @@ covA = covariance_matrix(mean_subtracted, data);
 
 
 % 3) Scale pc with corresponding eigenvalue
-whitened_data = diag(1./sqrt(diag(eigen_values) + epsilon)) * eigen_vectors' * mean_subtracted;
+whitened_data = diag(1./sqrt(diag(eigen_values))) * eigen_vectors' * mean_subtracted;
 
 end
 
