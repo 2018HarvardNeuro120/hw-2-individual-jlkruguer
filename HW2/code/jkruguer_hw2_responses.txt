@@ -92,7 +92,7 @@ Data Analysis Questions/Responses:
                  principle components from the whitened data? (don’t over think it!)
                      A:The principle components are the columns of the projection matrix. So I should be able to simply grab the column
                        from this matrix since it corresponds to the largest eigenvalue which makes it the greatest principle component,
-                       responsible for the majority of the variance in the data.
+                       responsible for the majority of the variance in the data. See scatter plort in part b
 
     Part (c): ICA
     
