@@ -1,0 +1,111 @@
+Jordan Kruguer
+Neuro 120: Intro to Computational Neuroscience
+HW2: Data Analysis
+Note to TAs: Hello, I just wanted to clarify that the past week 
+Main files altered: 
+    1. Created covariance_matrix.m function
+    2. Created iterative version of nn_regression.m --> nn_regression_iterate.m 
+    3. Created problem3.m to do cocktail problem
+    4. jkruguer_hw2_responses.txt.
+External Resources Referenced for Assignment:
+      1. MATLAB for Neuroscientists book.
+      2. MATLAB documentation on inline functions.
+      
+
+Data Analysis Questions/Responses:
+1. Auditory Neuroplasticity
+    Part (a): See raster plot in Figures & Plots/1. Auditory neuroplasticity/single_unit_response.fig
+              Q: Does this neuron respond to the stimulus?
+                    A: Yes, this neuron seems to fire reliably between 0.2-0.6 seconds in each trial. There is some sparse firing that occurs later in some trials
+                    however, for the most part this neuron seems to be consitently firing each time the stimulus pulse is presented.
+    Part (b): 
+    Part (c):
+    Part (d):
+    Part (e):
+    Part (f):
+    Part (g):
+    Part (h):
+    Part (i):
+    
+
+2. Random neural networks and overfitting in regression.
+    Part (a): See implementation of linear regression in nn_regression.m. 
+              See example prediction plots for Nh = 2,10,26 located in Figures & Plots/2. Random neural networks and overfiting in regression/Part a
+    Part (b): Used code from nn_regression, iterating over 500 runs for 40 different network sizes.
+              See plot of average mean squared test error as a function of network size
+              in Figures & Plots/2. Random neural networks and overfiting in regression/Part b
+              Q: What would you say is the approximate best size model?
+                    A: It appears that 
+              Q: How do things go wrong when the model is too small or too big?
+                    A: When the model is too small there is the potential for underfittng the data
+                        which means that there isn't information in order to find an apprpriate fit to 
+                        the real data. Having a network that is too large causes the exact opposite problem,
+                        often resulting in overfitting, where at some point, as the size of the model goes towards
+                        the number of parameters, the model may seem like its fitting well but infact, it only
+                        captures each specific data point without genalarizing to the trend of the data as a whole.
+    Part (c): See Figures & Plots/2. Random neural networks and overfiting in regression/Part c
+              Q: What would you say is the approximate best model size? 
+              Q: How variable is the performance of the really big networks compared to smaller networks?
+                    A:  
+    Part (d): See plots in Figures & Plots/2. Random neural networks and overfiting in regression/Part d
+              Q: What is the typical MSE with and without label noise? 
+                    A: With label noise (and 500 network size), the MSE was 3.26278
+                       Without label noise the MSE was significantly smaller, 7.72505e-05
+              Q: Do the predications with label noise look good?
+                    A: No, the prediction with label noise had extreme overfitting, and as a result, very 
+                       poor overall generalized fit to the training set.
+              Q: Changed regularization term?
+                    A: See plots in same directory as other Part c plots.
+                       Suprisingly the regularization term didn't make that large of a difference
+                       for either mean squared errors however it makes sense that the error with a regularization term
+                       would produce a slightly better fit, since regularization is meant to penalize biased weights.
+    Part (e):
+              Q: Does it makes sense for neural networks to massively expand the dimension of their inputs?
+                    A: Adding more inputs increases the complexity of the model. It may appear that this produces a minimum MSE and as a result
+                       a near perfect fit, however, it is likely that such an overly complex model will grossly overfit the data, essentially
+                       rendering the model useless for predicting correct outputs on new data.
+              Q: What regime would you argue is the relevent regime for learning problems faced by brain?
+                    A: It is important to have sufficient training data for your model, and 
+                       similarly a network of neurons in the brain would require some threshold of input, however having, a drastically large amount of input compared to parameters or units
+                       seems unlikely to have a possitive effect in terms of tuning a function that appropriately calculates correct outputs that generalize well. 
+
+3. Image demixing: visual cocktail party problem.
+    Part (a): Covariance matrix and PCA
+        Part(i): See inline function in problem3.m and comments on error I was getting.
+                 Implemented the logic outside of the inline function to move past the problem.
+
+        Part(ii): See covariance_matrix.m function. I validated my function with the built in cov method and
+                  got the same output.
+        
+        Part(iii): See Figures & Plots/3. Image Demixing: visual cocktail party problem/Part a
+                   for PCA projection onto original data.
+        
+        Part(iv): 
+                   Time comparison (Using tic toc bult in MATLAB runtime tracker): 
+                   - svd (1000,5000) --> Elapsed time was 0.245642 seconds.
+                   - svd (5000,1000) --> Elapsed time was 0.174150 seconds.
+                   - calc & diag (1000,5000) --> Elapsed time was 0.004078 seconds.
+                   - calc & diag (5000,1000) --> Elapsed time was 0.001228 seconds.
+
+    Part (b): Whitening the data
+              Q: Given how you constructed your whitened data, how can you extract the first
+                 principle components from the whitened data? (don’t over think it!)
+                     A:The principle components are the columns of the projection matrix. So I should be able to simply grab the column
+                       from this matrix since it corresponds to the largest eigenvalue which makes it the greatest principle component,
+                       responsible for the majority of the variance in the data.
+
+    Part (c): ICA
+    
+            
+                
+            
+
+
+
+            
+            
+
+                       
+  
+    
+
