@@ -1,7 +1,6 @@
 Jordan Kruguer
 Neuro 120: Intro to Computational Neuroscience
 HW2: Data Analysis
-Note to TAs: Hello, I just wanted to clarify that the past week 
 Main files altered: 
     1. Created covariance_matrix.m function
     2. Created iterative version of nn_regression.m --> nn_regression_iterate.m 
