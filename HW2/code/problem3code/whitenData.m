@@ -1,18 +1,17 @@
 function whitened_data = whitenData(data)
 
 % 1) Remove the mean of the data:
-avg = mean(data, 1);
-mean_subtracted = data - repmat(avg, size(data,1), 1);
+subtractMean = @(dataMatrix) (dataMatrix - mean(dataMatrix)); % In line function: subtract mean from data matrix
+getCovariance = @(dataMeanSubtracted, originalData) (dataMeanSubtracted.'*dataMeanSubtracted)/(size(originalData,1)-1); % In line function: get covariance matrix
 
 % 2) Project data into the basis of principle components
+meanRemoved = subtractMean(data);
+covarianceMatrix = getCovariance(meanRemoved, data);
+[eigenVectors, eigenValues] = eig(covarianceMatrix);
 
-covA = covariance_matrix(mean_subtracted, data);
+% 3) Scale PCs with corresponding eigenvalue
+scalarMultiplier = transpose(diag(eigenValues).^(0.5));
+scaledEigenVectors = eigenVectors .* scalarMultiplier;
+whitened_data = meanRemoved * scaledEigenVectors; 
 
-[eigen_vectors, eigen_values] = eig(covA);
-
-
-% 3) Scale pc with corresponding eigenvalue
-scalar_multiplier = transpose(diag(eigen_values).^(0.5));
-scaled_eigen_vectors = eigen_vectors .* scalar_multiplier;
-whitened_data = mean_subtracted * scaled_eigen_vectors; 
 end

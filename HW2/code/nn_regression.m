@@ -2,9 +2,10 @@ clear all
 
 %% Set up parameters
 N = 40; % Number of training samples
-epsilon = 0.2; % Amount of label noise
-Nh = 500;
-lambda = 1e-4;
+epsilon = 0.0; % Amount of label noise
+Nh = 2;
+lambda = 0;
+%lambda = 1e-4;
 
 %% Make dataset
 target_fn = @(t) sin(t);
@@ -31,7 +32,7 @@ h_test(h_test<0)=0;
 %% Now train linear regression to map from h to y
 
 % w = ????
-w = (y*h')*pinv(h*h'+lambda); % Implemented linear regression with regularization
+w = (y*h')*pinv((h*h')+lambda*eye(size((h*h'),1))); % Implemented linear regression with regularization
 
 y_pred = w*h_test;
 

@@ -2,50 +2,83 @@ Jordan Kruguer
 Neuro 120: Intro to Computational Neuroscience
 HW2: Data Analysis
 Main files altered: 
-    1. Created covariance_matrix.m function
-    2. Created iterative version of nn_regression.m --> nn_regression_iterate.m 
-    3. Created problem3.m to do cocktail problem
-    4. jkruguer_hw2_responses.txt.
+    1. exposure_stimulus_investigation.m: Wrote code for question1 part (a), part(b), part(c), part(d) (Wrote psth function for this part)
+    2. sta code
+    3. problem3.m: All code for Question 3-Part (a), Part(i) --> Part(iv)
+    4. toWhiten.m: Wrote function to whiten data
+    5. Created iterative version of nn_regression.m --> nn_regression_iterate.m 
+    6. jkruguer_hw2_responses.txt.
 External Resources Referenced for Assignment:
-      1. MATLAB for Neuroscientists book.
-      2. MATLAB documentation on inline functions.
+    1. MATLAB for Neuroscientists book.
+    2. MATLAB documentation on inline functions.
+    3. http://matlabdatamining.blogspot.com/2010/02/principal-components-analysis.html
+   
       
 
 Data Analysis Questions/Responses:
 1. Auditory Neuroplasticity
-    Part (a): See raster plot in Figures & Plots/1. Auditory neuroplasticity/single_unit_response.fig
-              Q: Does this neuron respond to the stimulus?
-                    A: Yes, this neuron seems to fire reliably between 0.2-0.6 seconds in each trial. There is some sparse firing that occurs later in some trials
-                    however, for the most part this neuron seems to be consitently firing each time the stimulus pulse is presented.
-    Part (b): 
-    Part (c):
-    Part (d):
-    Part (e):
-    Part (f):
-    Part (g):
-    Part (h):
-    Part (i):
+    Part (a): See raster plot in Figures & Plots/1. Auditory neuroplasticity/Part (a)
+              Q: Does this neuron appear to respond to the stimulus?
+                    A: Yes, this neuron seems to fire reliably between 0.2-0.6 seconds in each trial. When the stimulus is initially presented there is 
+                       a relatively consistent spike time or grouping of rapid spikes between 0.02s --> 0.06s accross trials.
+                       There is some sparse firing that occurs later in some trials (0.08s-0.16s or the second half of the trial) that appears to be a 
+                       secondary response to the stimulus from this single unit. The number of spikes that occur in various trials range from 0-4 spikes, however,
+                       for the most part, this neuron seems to be firing with fairly uniform regularity each trial. 
+
+    Part (b): See firing rate plot in Figures & Plots/1. Auditory neuroplasticity/Part (b)
+    Part (c): See firing rate plots in Figures & Plots/1. Auditory neuroplasticity/Part (c)
+              Q: What is the impact of very small or very large standard deviations?
+                    A: The standard deviation value dictates the width of the'bin' used for gaussian smoothing. As a result if the standard
+                       deviation is too small such as the 0.5 ms case, the single spikes will be more highly weighted making the firing rate look jagged
+                       and in the case of the large standard deviation it will simply smooth over all activity because almost all of the spikes in the trial will 
+                       be averaged out.
+    Part (d): See PSTH plot in Figures & Plots/1. Auditory neuroplasticity/Part (d)
+    Part (e): Q: What difference do you see between the experimental and cotrol groups? Did neurons become more or less selective to the exposure stimulus?
+                 Did the precision of responses change? Are there any differences in responses after the initial peak response?
+                    A: The experimentl group seemed to havea similar response to what we observed before for the single unit from thart same group
+                       so that is a sanity check in terms of how the entire population responds to the stimulus. The precision of the response for the experimental
+                       group remained very strong and correlated to the single unit response however beyond the first initial peak the response for this group
+                       seems to have more variation reflected in the somewhat jagged firing rate here. In terms of the control group, while the overall
+                       trend of the response is comprable to the experimental group in response to the stimulus, the control groups initial peak response
+                       is significantly dampened and more unstable in general as the whole trace of the firing rate is jagged. Also, where the experimental group 
+                       reaches a peak firing rate, the control group seems to plateau at a mazimum value and sustain that firing rate for slightly longer than the peak for the
+                       experimental group.
+    Part (f): See STA plot in Figures & Plots/1. Auditory neuroplasticity/Part (f)
+    Part (g): Q: What frequency is the neuron most selectie to?
+                    A: The neuron appears to be most selective to a frequency around 8 kHz.
+    Part (h): Q: Would the neurons peak response be higher to a constant tone or a pip? Approx. how long should a tone pip be to evoke the largest response?
+                    A: A tone pip would be more effective for evoking a peak response. A pip would allow for the avoidance of inhibitory regions. Ultimately according to the sta
+                       and I deal length for a tone pip would be about 20ms-25ms long.
+    Part (i): See stim correlation plot in Figures & Plots/1. Auditory neuroplasticity/Part (i)
+              Q: Is it close to an identity matrix?
+                    A: The stimulation correlation matrix appears to be correlated and reasonably close to the identity matrix which means that sta is the optimal linear filter.  
     
 
 2. Random neural networks and overfitting in regression.
     Part (a): See implementation of linear regression in nn_regression.m. 
               See example prediction plots for Nh = 2,10,26 located in Figures & Plots/2. Random neural networks and overfiting in regression/Part a
-    Part (b): Used code from nn_regression, iterating over 500 runs for 40 different network sizes.
+    Part (b): See code implementation in nn_regression_iterate.m.
               See plot of average mean squared test error as a function of network size
               in Figures & Plots/2. Random neural networks and overfiting in regression/Part b
               Q: What would you say is the approximate best size model?
-                    A: It appears that 
+                    A: In this case I think that most of the models do well at fitting the data as a whole. Some of the layers with sizes closer to 40
+                       perhaps are beginning to be slightly overbiased yet they still appear to fit farely well. Beyond this point, the mse for each 
+                       network with a larger layer size will continue to plateau as they slowly creep towards zero mse. Though it is going towards zero 
+                       it only improves gradually and will most likely begin to grossly overfit the data. 
               Q: How do things go wrong when the model is too small or too big?
                     A: When the model is too small there is the potential for underfittng the data
                         which means that there isn't information in order to find an apprpriate fit to 
                         the real data. Having a network that is too large causes the exact opposite problem,
-                        often resulting in overfitting, where at some point, as the size of the model goes towards
-                        the number of parameters, the model may seem like its fitting well but infact, it only
-                        captures each specific data point without genalarizing to the trend of the data as a whole.
+                        often resulting in overfitting, where at some point, the model may seem like its fitting 
+                        well, but infact, it only captures each specific data point without genalarizing to the trend 
+                        of the data as a whole. As a result the model cannot correctly map new inputs to the correct outputs. 
     Part (c): See Figures & Plots/2. Random neural networks and overfiting in regression/Part c
               Q: What would you say is the approximate best model size? 
+                        A: I believe that the best size model is around 40 neurons like in part b.  
               Q: How variable is the performance of the really big networks compared to smaller networks?
-                    A:  
+                        A: For this very large network, the mse drops very sharply after about 40-50 neurons. Becausethere is no regularization parameter it is
+                        likely that the models beyond this point have almost no mse yet are severely overfitting. In the case of the smaller networks, the fit is more
+                        stable and predictable, with meaningful decrease in mse indicating improved fit vs. overfitting in the case of the larger networks.
     Part (d): See plots in Figures & Plots/2. Random neural networks and overfiting in regression/Part d
               Q: What is the typical MSE with and without label noise? 
                     A: With label noise (and 500 network size), the MSE was 3.26278
@@ -55,9 +88,12 @@ Data Analysis Questions/Responses:
                        poor overall generalized fit to the training set.
               Q: Changed regularization term?
                     A: See plots in same directory as other Part c plots.
-                       Suprisingly the regularization term didn't make that large of a difference
-                       for either mean squared errors however it makes sense that the error with a regularization term
-                       would produce a slightly better fit, since regularization is meant to penalize biased weights.
+                       With label noise: MSE = 1.10674
+                       Without label noise MSE = 1.18849
+                       The regularization term made a significant difference
+                       for both mean squared errors however. For the model with label noise it improved the fit
+                       and suprisingly for the model without label noise it penalized weights and produced amore poorly fitted model.
+                       It makes sense that the error with a regularization term would produce a slightly better fit, since regularization is meant to penalize biased weights.
     Part (e):
               Q: Does it makes sense for neural networks to massively expand the dimension of their inputs?
                     A: Adding more inputs increases the complexity of the model. It may appear that this produces a minimum MSE and as a result
@@ -66,34 +102,40 @@ Data Analysis Questions/Responses:
               Q: What regime would you argue is the relevent regime for learning problems faced by brain?
                     A: It is important to have sufficient training data for your model, and 
                        similarly a network of neurons in the brain would require some threshold of input, however having, a drastically large amount of input compared to parameters or units
-                       seems unlikely to have a possitive effect in terms of tuning a function that appropriately calculates correct outputs that generalize well. 
+                       seems unlikely to have a possitive effect in terms of tuning a function that appropriately calculates correct outputs that generalize well. In general, I think that some label noise would be 
+                       a reasonable model of the type of sensory input we recieve and learn on since it isn't nicely correlated. The size or amount of neurons however depends on the function and complexity we are trying to 
+                       model. In this case, the original set of about 0:40 neurons seemed to suffice.
 
 3. Image demixing: visual cocktail party problem.
     Part (a): Covariance matrix and PCA
-        Part(i): See inline function in problem3.m and comments on error I was getting.
-                 Implemented the logic outside of the inline function to move past the problem.
-
-        Part(ii): See covariance_matrix.m function. I validated my function with the built in cov method and
-                  got the same output.
-        
-        Part(iii): See Figures & Plots/3. Image Demixing: visual cocktail party problem/Part a
+        Part(i): See subtractMean function in problem3.m 
+        Part(ii): See getCovariance function in problem3.m. Validation with build in cov function is in code as well.
+        Part(iii): See Figures & Plots/3. Image Demixing: visual cocktail party problem/Part a/PcsDataOverlay.fig
                    for PCA projection onto original data.
         
         Part(iv): 
                    Time comparison (Using tic toc bult in MATLAB runtime tracker): 
-                   - svd (1000,5000) --> Elapsed time was 0.245642 seconds.
-                   - svd (5000,1000) --> Elapsed time was 0.174150 seconds.
-                   - calc & diag (1000,5000) --> Elapsed time was 0.004078 seconds.
-                   - calc & diag (5000,1000) --> Elapsed time was 0.001228 seconds.
+                   a = 1000x5000 test matrix
+                   b = 5000x1000 test matrix
+                   Elapsed time is 0.210274 seconds. --> SVD on a
+                   Elapsed time is 6.196519 seconds. --> Cov + Diag on a
+                   Elapsed time is 0.177245 seconds. --> SVD on b
+                   Elapsed time is 0.133116 seconds. --> Cov + Diag on b
+                   Note: It takes longer to compute for test matrix a simply because in this case there are 5000^2 different 1000 dimensional products 
+                   compared to 1000^2 5000 dimensional products. There is simply more to compute in this case. In terms of using SVD vs. calculating Cov 
+                   and then Diagonalizing the test matrices, it appears that SVD is a more optimized algorithm which is true. I am somewhat puzzled by why 
+                   was slower in the second case.
 
     Part (b): Whitening the data
               Q: Given how you constructed your whitened data, how can you extract the first
                  principle components from the whitened data? (don’t over think it!)
-                     A:The principle components are the columns of the projection matrix. So I should be able to simply grab the column
-                       from this matrix since it corresponds to the largest eigenvalue which makes it the greatest principle component,
-                       responsible for the majority of the variance in the data. See scatter plort in part b
+                     A: See Figures & Plots/3. Image Demixing: visual cocktail party problem/Part b/whitenedData.fig
+                        You would simply need to multiply the whitened data times the corresponding coefficients or eigenvalues.
 
     Part (c): ICA
+        Part (i): See Figures & Plots/3. Image Demixing: visual cocktail party problem/Part c/Part i for all three images plotted using the plotImgs.m function
+        Part (ii): See Figures & Plots/3. Image Demixing: visual cocktail party problem/Part c/Part ii
+        Part (iii): See Figures & Plots/3. Image Demixing: visual cocktail party problem/Part c/Part iii    
     
             
                 

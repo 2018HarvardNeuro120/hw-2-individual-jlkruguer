@@ -1,27 +1,30 @@
 clear all
-results = ones(40,2); % Will hold average mse for each network size
-mse = []; % Will hold mse values for the 500 iterations on each network size  
-for i=40:500
-    for j=1:400
-        
-        
-        %% Set up parameters
-        N = 40; % Number of training samples
-        epsilon = 0.2; % Amount of label noise
-        Nh = 500;
-        lambda = 1e-4;
 
-        %% Make dataset
-        target_fn = @(t) sin(t);
-        x = linspace(-pi,pi,N);
-        y = target_fn(x) + epsilon*randn(size(x));
+%% Set up parameters
+N = 40; % Number of training samples
+epsilon = 0.2; % Amount of label noise
+NhMulti = 500;
+repMSE = 500; % Iterations used to average MSE for each network size
+lambda = 0;
+%lambda = 1e-4;
 
-        Ntest = 100;
-        x_test = linspace(-pi,pi,Ntest);
-        y_test = target_fn(x_test);
+%% Make dataset
+target_fn = @(t) sin(t);
+x = linspace(-pi,pi,N);
+y = target_fn(x) + epsilon*randn(size(x));
 
-        Ni = 2;
+Ntest = 100;
+x_test = linspace(-pi,pi,Ntest);
+y_test = target_fn(x_test);
 
+Ni = 2;
+
+meanSquaredError = zeros(size(NhMulti)); % Will hold average mse for each network size
+ 
+for i = 1 : length(NhMulti)
+    Nh = NhMulti(i); % Network size by index
+    disp(i)
+    for j = 1 : repMSE 
         %% Compute network activity
 
         J = randn(Nh,Ni)/Nh;
@@ -36,25 +39,30 @@ for i=40:500
         %% Now train linear regression to map from h to y
 
         % w = ????
-        w = (y*h')*pinv(h*h'+lambda); % Implemented linear regression with regularization
+        w = (y*h')*pinv((h*h')+lambda*eye(size((h*h'),1))); % Implemented linear regression with regularization
 
         y_pred = w*h_test;
 
         mean_squared_error = norm(y_test-y_pred).^2;
-        
-        mse(j) = mean_squared_error;
 
-       
-        disp(j)
-    end 
-    avg_mse = mean(mse);
-    results(i,1) = i;
-    results(i,2) = avg_mse;
-    i = i+10
-    disp(i)
+        meanSquaredError(i) = meanSquaredError(i) + mean_squared_error;
+
+      
+    end
+    close all
+    plot(x,y,'ob')
+    hold on
+    plot(x_test,y_test)
+    hold on
+    plot(x_test,y_pred)
+
+    text(-pi,[.1 .9]*get(gca,'YLim')',sprintf('MSE: %g ', mean_squared_error))
+    xlabel('Input')
+    ylabel('Output')
+    legend('Training data','Test data','Prediction')
 end
 
 %%
 figure;
-plot(results(:,1), results(:,2), 'o')
+plot(NhMulti, meanSquaredError/repMSE);
 xlabel('Network size'); ylabel('Average Mean Squared Error');

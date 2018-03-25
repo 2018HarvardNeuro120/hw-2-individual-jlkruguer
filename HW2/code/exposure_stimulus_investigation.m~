@@ -1,0 +1,103 @@
+clear all
+
+load exposure_stimulus_experiment.mat
+
+stimulus_start_times = 0:1/6:(60-1/6); % In seconds
+
+%% Auditory Neurosplasticity:
+
+%% Part (a)
+             
+% Define trial edges in order to sort spikes
+nTrials = length(stimulus_start_times);
+[N,edges,bin] = histcounts(spikes_single_unit, nTrials);
+
+% Populate a trial struct with relevant spikes for each trial
+trials = struct; % Will hold spikes
+time_set = 1/6;
+for i=1:nTrials
+    trials(i).spikes = (spikes_single_unit(edges(i) < spikes_single_unit & spikes_single_unit < edges(i+1)));
+    trials(i).spikes = trials(i).spikes - edges(i);
+end
+
+% Create Raster plot of 1/6 second stimulus and neural spiking response
+figure; % Create a new figure
+hold on; 
+
+% Use trial binned spike times to generate raster plot
+for i=1:nTrials
+    for j=1:length(trials(i).spikes)
+        if length(trials(i).spikes)==0
+            continue;
+        else
+            plot([trials(i).spikes(j), trials(i).spikes(j)], [i-1 i], 'm+:')
+        end 
+    end 
+end
+xlabel('Time (s)'); % time is in seconds
+ylabel('Stimulus Number');
+xlim([0 1/6])
+ylim([0 360])
+title('Single Unit Response to Stimulus')
+
+%% Part (b)/Part (c): 
+
+% Plot Avg. firing rate (Gaussian smoothed)
+
+nTrials = length(stimulus_start_times);
+[N,edges,bin] = histcounts(spikes_single_unit, nTrials);
+spikeTotal = [];
+
+for i=1:nTrials
+    spikes = (spikes_single_unit(edges(i) < spikes_single_unit & spikes_single_unit < edges(i+1)));
+    start = edges(i);
+    spikeTotal = [spikeTotal; spikes-start];
+end
+
+tStepSize = 0.0005;
+tTrial = 0:tStepSize:1/6;
+firingRate = zeros(size(tTrial));
+for s= spikeTotal'
+    firingRate = firingRate + normpdf(tTrial,s,0.5);
+end
+plot(tTrial*1000,firingRate/360)
+hold on
+xlabel('Time (ms)'); ylabel('FiringRate (Hz)')
+
+%% Part (d):
+
+% Make a grand avg PSTH
+
+% Experimental group
+spikesExp = spikes_exp;
+
+% Control Group
+spikesCon = spikes_control;
+
+binWidth = .005; % Bin width defined in question 5 ms
+
+
+exp = zeros(length(psth(spikesExp,0,1/6,binWidth)),nTrials);
+con = zeros(length(psth(spikesCon,0,1/6,binWidth)),nTrials);
+
+
+for i = 1:nTrials
+    tStart = edges(i);
+    tEnd = edges(i+1);
+    exp(:,i) = psth(spk,tStart,tEnd,binWidth); 
+    con(:,i) = psth(spk,tStart,tEnd,binWidth);
+end
+
+t = 0:binWidth:1/6;
+plot(t*1000,mean(exp,2)/N_exp,t*1000,mean(ctrl,2)/N_control,'linewidth',2)
+legend('Experimental group','Control group')
+xlabel('Time (ms)')
+ylabel('Firing rate (Hz)')
+
+
+
+
+
+
+
+
